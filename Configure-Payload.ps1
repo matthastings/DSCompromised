@@ -46,8 +46,7 @@ PS C:\> Configure-Payload -SourceFile C:\Windows\System32\calc.exe -DestinationP
 
 Description
 -----------
-
-Same process followed as described above except process is launched with parameters provided in Arguments variable
+Creates file C:\calc.exe with contents of C:\Windows\System32\calc.exe and ensures file is running with parameters provided in Arguments variable
 
 
 #>
@@ -100,9 +99,6 @@ Same process followed as described above except process is launched with paramet
                     Start-Process $DestinationPath $Arguments
                 }).Replace('$DestinationPath', "'$DestinationPath'").Replace('$Arguments', "'$Arguments'")
                 TestScript = $([string]{
-                    #[System.IO.Path]::GetFileNameWithoutExtension($DestinationPath) | 
-                   # % {(Get-Process -Name $_ -ErrorAction SilentlyContinue) -ne $Null}
-                   #(get-process).Path | ? {$_} | ? {$_.tolower() -eq $DestinationPath.tolower()} | % {$_.tolower() -ne $DestinationPath.ToLower()}
                    (get-process).path -contains $DestinationPath
                 }).Replace('$DestinationPath', "'$DestinationPath'")
                     
@@ -118,7 +114,7 @@ Same process followed as described above except process is launched with paramet
         }
     }
 
-    SetupPullConfig -NodeGUID $GUID -OutputPath "$env:SystemDrive\Program Files\WindowsPowershell\DscService\Configuration" #-DestinationPath $DestinationPath -SourceFile $SourceFile
+    SetupPullConfig -NodeGUID $GUID -OutputPath "$env:SystemDrive\Program Files\WindowsPowershell\DscService\Configuration"
     
     Write-Host "Generating Checksum"
     New-DscChecksum -ConfigurationPath "$env:SystemDrive\Program Files\WindowsPowershell\DscService\Configuration\" -OutPath "$env:SystemDrive\Program Files\WindowsPowershell\DscService\Configuration"
