@@ -83,17 +83,17 @@ Note: If 'port' parameter is not used the default port is 8080
  
         LocalConfigurationManager
         {
-            AllowModuleOverwrite 			= $True
-            ConfigurationID 				= $NodeId
+            AllowModuleOverwrite            = $True
+            ConfigurationID                 = $NodeId
             # Minutes between target policy being implemented
-            ConfigurationModeFrequencyMins 	= 15 
-            ConfigurationMode 				= 'ApplyAndAutoCorrect'
+            ConfigurationModeFrequencyMins  = 15 
+            ConfigurationMode               = 'ApplyAndAutoCorrect'
             # Minutes between pull server requests
-            RefreshFrequencyMins 			= 30
-            RebootNodeIfNeeded 				= $False
-            RefreshMode 					= 'Pull'
-            DownloadManagerName 			= 'WebDownloadManager'
-            DownloadManagerCustomData 		= (@{ServerUrl = "http://${PullServer}:${Port}/psdscpullserver.svc"; 
+            RefreshFrequencyMins            = 30
+            RebootNodeIfNeeded              = $False
+            RefreshMode                     = 'Pull'
+            DownloadManagerName             = 'WebDownloadManager'
+            DownloadManagerCustomData       = (@{ServerUrl = "http://${PullServer}:${Port}/psdscpullserver.svc"; 
                                             AllowUnsecureConnection = “TRUE”})
          
         }
