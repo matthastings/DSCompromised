@@ -62,31 +62,30 @@ Configures pull server to host compliance reports on port 9000 and configuration
             {
                 Ensure = "Present"
                 Name = "DSC-Service"
-            }
-
+            
             xDscWebService PSDSCPullServer
             {
-                Ensure 					= "Present"
-                EndpointName 			= "PSDSCPullServer"
-                Port 					= $ConfigPort
-                PhysicalPath 			= "$env:SystemDrive\inetpub\wwwroot\PSDSCPullServer"
-                CertificateThumbPrint 	= "AllowUnencryptedTraffic"
-                ModulePath 				= "$env:PROGRAMFILES\WindowsPowerShell\DscService\Modules"
-                ConfigurationPath 		= "$env:PROGRAMFILES\WindowsPowerShell\DscService\Configuration"
-                State 					= "Started"
-                DependsOn 				= "[WindowsFeature]DSCServiceFeature"
+                Ensure                    = "Present"
+                EndpointName              = "PSDSCPullServer"
+                Port                      = $ConfigPort
+                PhysicalPath              = "$env:SystemDrive\inetpub\wwwroot\PSDSCPullServer"
+                CertificateThumbPrint     = "AllowUnencryptedTraffic"
+                ModulePath                = "$env:PROGRAMFILES\WindowsPowerShell\DscService\Modules"
+                ConfigurationPath         = "$env:PROGRAMFILES\WindowsPowerShell\DscService\Configuration"
+                State                     = "Started"
+                DependsOn                 = "[WindowsFeature]DSCServiceFeature"
             }
 
             xDscWebService PSDSCComplianceServer
             {
-                Ensure 					= "Present"
-                EndpointName 			= "PSDSCComplianceServer"
-                Port 					= $CompliancePort
-                PhysicalPath 			= "$env:SystemDrive\inetpub\wwwroot\PSDSCComplianceServer"
-                CertificateThumbPrint 	= "AllowUnencryptedTraffic"
-                State 					= "Started"
-                IsComplianceServer 		= $true
-                DependsOn 				= ("[WindowsFeature]DSCServiceFeature","[xDSCWebService]PSDSCPullServer")
+                Ensure                   = "Present"
+                EndpointName             = "PSDSCComplianceServer"
+                Port                     = $CompliancePort
+                PhysicalPath             = "$env:SystemDrive\inetpub\wwwroot\PSDSCComplianceServer"
+                CertificateThumbPrint    = "AllowUnencryptedTraffic"
+                State                    = "Started"
+                IsComplianceServer       = $true
+                DependsOn                = ("[WindowsFeature]DSCServiceFeature","[xDSCWebService]PSDSCPullServer")
             }
         }
     }
