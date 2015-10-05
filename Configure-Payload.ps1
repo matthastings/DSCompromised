@@ -88,9 +88,9 @@ Creates file C:\calc.exe with contents of C:\Windows\System32\calc.exe and ensur
 
                 GetScript = {
                     return @{
-                        GetScript = $GetScript
-                        SetScript = $SetScript
-                        TestScript = $TestScript
+                        GetScript 	= $GetScript
+                        SetScript 	= $SetScript
+                        TestScript 	= $TestScript
                     }
                 }
             }
@@ -104,9 +104,9 @@ Creates file C:\calc.exe with contents of C:\Windows\System32\calc.exe and ensur
                     
                 GetScript = {
                     return @{
-                        GetScript = $GetScript
-                        SetScript = $SetScript
-                        TestScript = $TestScript
+                        GetScript 	= $GetScript
+                        SetScript 	= $SetScript
+                        TestScript 	= $TestScript
                     }
                 }
             }        

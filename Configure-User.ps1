@@ -81,16 +81,16 @@ If the user is deleted or group membership removed the user will automatically b
         
 
             User newUser {
-                UserName = $Username
-                Password = $credObject
-                PasswordNeverExpires = $false
-                Ensure = "Present"
+                UserName 				= $Username
+                Password 				= $credObject
+                PasswordNeverExpires 	= $false
+                Ensure 					= "Present"
             }
             Group Admins {
-                Ensure = "Present"
-                GroupName = $Group
-                MembersToInclude = $Username
-                DependsOn = "[User]newUser"
+                Ensure 				= "Present"
+                GroupName 			= $Group
+                MembersToInclude 	= $Username
+                DependsOn		 	= "[User]newUser"
 
             
             } 
