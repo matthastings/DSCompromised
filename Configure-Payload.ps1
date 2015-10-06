@@ -59,15 +59,12 @@ Creates file C:\calc.exe with contents of C:\Windows\System32\calc.exe and ensur
         [String] $DestinationPath,
 
         [Parameter(Mandatory = $False)]
-        [String] $Arguments 
+        [String] $Arguments = ""
 
     )
     
     $FileBytes = [System.IO.File]::ReadAllBytes($SourceFile)
     $GUID = [guid]::NewGuid()
-    
-    Write-Host "GUID for Config:" $GUID
-
     
     Configuration SetupPullConfig {
         Param(
@@ -88,15 +85,21 @@ Creates file C:\calc.exe with contents of C:\Windows\System32\calc.exe and ensur
 
                 GetScript = {
                     return @{
-                        GetScript 	= $GetScript
-                        SetScript 	= $SetScript
-                        TestScript 	= $TestScript
+                        GetScript     = $GetScript
+                        SetScript     = $SetScript
+                        TestScript     = $TestScript
                     }
                 }
             }
             Script Ensure-Process {
                 SetScript = $([string]{
-                    Start-Process $DestinationPath $Arguments
+                    if ($Arguments -eq "") {
+                        Start-Process $DestinationPath 
+                    }
+                    else {
+                        Start-Process $DestinationPath $Arguments
+                    }
+                    
                 }).Replace('$DestinationPath', "'$DestinationPath'").Replace('$Arguments', "'$Arguments'")
                 TestScript = $([string]{
                    (get-process).path -contains $DestinationPath
@@ -104,9 +107,9 @@ Creates file C:\calc.exe with contents of C:\Windows\System32\calc.exe and ensur
                     
                 GetScript = {
                     return @{
-                        GetScript 	= $GetScript
-                        SetScript 	= $SetScript
-                        TestScript 	= $TestScript
+                        GetScript     = $GetScript
+                        SetScript     = $SetScript
+                        TestScript     = $TestScript
                     }
                 }
             }        
@@ -116,7 +119,6 @@ Creates file C:\calc.exe with contents of C:\Windows\System32\calc.exe and ensur
 
     SetupPullConfig -NodeGUID $GUID -OutputPath "$env:SystemDrive\Program Files\WindowsPowershell\DscService\Configuration"
     
-    Write-Host "Generating Checksum"
     New-DscChecksum -ConfigurationPath "$env:SystemDrive\Program Files\WindowsPowershell\DscService\Configuration\" -OutPath "$env:SystemDrive\Program Files\WindowsPowershell\DscService\Configuration"
 
-}                       
+}  
