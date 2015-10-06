@@ -1,5 +1,7 @@
 # DSCompromised
-PowerShell framework for managing and infecting systems via Windows Desired State Configuration
+PowerShell framework for managing and infecting systems via Windows Desired State Configuration (DSC)
+DSC is a built-in feature in Windows Management Framework 4.0 (PowerShell v4) and is installed natively
+on Windows operating systems beginning with  Server 2012 R2 and Windows 8.1. 
 
 ## Getting Started
 
@@ -8,8 +10,17 @@ PowerShell framework for managing and infecting systems via Windows Desired Stat
 1. Must have PowerShell 4.0 or later installed
 2. Install DSC service
 	- `Add-WindowsFeature Dsc-Service`
-3. Download and install [xPSDesiredStateConfiguration Module](https://gallery.technet.microsoft.com/xPSDesiredStateConfiguratio-417dc71d)
-4. Run `Configure-Server.ps1` 
+3. Download [xPSDesiredStateConfiguration Module](https://gallery.technet.microsoft.com/xPSDesiredStateConfiguratio-417dc71d)
+4. Unzip the contentsto $env:ProgramFiles\WindowsPowerShell\Modules and relaunch PS 
+5. To confirm installation run `Get-DSCResource` and confirm the following modules are present:
+    - xDscWebService
+    - xWindowsProcess
+    - xService
+    - xRemoteFile
+    - xPackage
+    - xGroup
+    - xFileUpload
+6. Run `Configure-Server.ps1` 
 
 ### Create Configuration
 
@@ -20,3 +31,7 @@ PowerShell framework for managing and infecting systems via Windows Desired Stat
 
 1. On victim run `Configure-Victim.ps1`
 2. Provide **GUID** as argument 
+
+## Troubleshooting
+
+- If you get the error `Invoke-CimMethod : The SendConfigurationApply function did not succeed.` when attempting to run a very short-lived process (e.g. a console app that requires arguments that have been omitted, thereby terminating immediately), it may be due to the OS mis-interpreting that the configuration failed. The process still executed.
