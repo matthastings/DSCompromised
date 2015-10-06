@@ -62,6 +62,7 @@ Configures pull server to host compliance reports on port 9000 and configuration
             {
                 Ensure = "Present"
                 Name = "DSC-Service"
+            }
             
             xDscWebService PSDSCPullServer
             {
@@ -90,6 +91,7 @@ Configures pull server to host compliance reports on port 9000 and configuration
         }
     }
 
-    SetupPullServer -ComputerName dsc-server
+    SetupPullServer -ComputerName $env:computername
+    Start-DscConfiguration .\SetupPullServer -Force -EA SilentlyContinue
 
 }
