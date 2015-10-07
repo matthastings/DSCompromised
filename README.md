@@ -9,7 +9,9 @@ on Windows operating systems beginning with  Server 2012 R2 and Windows 8.1.
 
 1. Must have PowerShell 4.0 or later installed
 2. Install DSC service
-	- `Add-WindowsFeature Dsc-Service`
+    - `Add-WindowsFeature Dsc-Service`
+    - This will only work on Server 2012 R2 or later
+    - See [link](https://davewyatt.wordpress.com/2014/06/07/how-to-install-a-dsc-pull-server-on-windows-2008-r2/) for steps to go through the pain of installing on Server 2008
 3. Download [xPSDesiredStateConfiguration Module](https://gallery.technet.microsoft.com/xPSDesiredStateConfiguratio-417dc71d)
 4. Unzip the contentsto $env:ProgramFiles\WindowsPowerShell\Modules and relaunch PS 
 5. To confirm installation run `Get-DSCResource` and confirm the following modules are present:
