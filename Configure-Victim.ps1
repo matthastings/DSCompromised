@@ -101,19 +101,12 @@ Note: If 'port' parameter is not used the default port is 8080
  
     winrm quickconfig -quiet
 
-    Write-Host "Generating pull server configuration"
  
     ConfigurePullServer -NodeId $GUID -PullServer $Server -OutputPath $MOFPath 
 
-    Write-Host "Applying pull server settings"
-
     Set-DscLocalConfigurationManager -path $MofPath -Verbose
 
-    # Force DSC to implement config 
-    Invoke-CimMethod -Namespace root/Microsoft/Windows/DesiredStateConfiguration -Cl MSFT_DSCLocalConfigurationManager -Method PerformRequiredConfigurationChecks -Arguments @{Flags = [System.UInt32]1}
-
-    #Delete MOF file and directory
-    Write-Host "Deleting MOF file"
+    Update-DscConfiguration -Wait
 
     Remove-Item -Path $MofPath -Force -Recurse
 }
