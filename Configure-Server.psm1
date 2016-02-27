@@ -1,9 +1,31 @@
-﻿function Generate-Configuration {
-    
+﻿function Generate-Config {
+<#
+.SYNOPSIS
+
+Creates DSC configuration from provided resource objects
+
+.DESCRIPTION
+
+Creates DSC configuration. Given an array of resource objects creates and hosts configuration. 
+
+.PARAMETER ResourceObject
+
+Object array of resources to be included in configuration
+
+.EXAMPLE
+
+PS C:\> Generate-Config -ResourceObject $User,$Payload
+
+Description
+-----------
+
+Creates configuration from two previously defined objects $User and $Payload
+
+#>
 
     [CmdletBinding()] Param(
     [Parameter(Mandatory = $True)]
-    [Object[]] $objArray
+    [Object[]] $ResourceObject
     )
     # Create GUID for configuration
     $Guid = [guid]::NewGuid()
@@ -14,6 +36,7 @@
         [Parameter(Mandatory = $True)]
         [String[]] $NodeGUID
         )
+        Import-DscResource –ModuleName ’PSDesiredStateConfiguration’ -ModuleVersion 1.1
         Node $NodeGUID {
             foreach ($configobj in $objArray){
                 If ($configobj.Type -eq "Payload") {
@@ -309,7 +332,7 @@ Configures pull server to host compliance reports on port 9000 and configuration
         [string[]]$ComputerName = 'localhost'
         )
 
-        Import-DSCResource -ModuleName xPSDesiredStateConfiguration
+        Import-DSCResource -ModuleName xPSDesiredStateConfiguration 
 
         Node $ComputerName
         {
