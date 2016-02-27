@@ -23,18 +23,19 @@ on Windows operating systems beginning with  Server 2012 R2 and Windows 8.1.
     - xGroup
     - xFileUpload
 6. Verify winrm is running with command `winrm quickconfig`
-7. Run `Configure-Server.ps1` 
+7. Run `Configure-Server` function from `Configure-Server.psm1`
 
 ### Create Configuration
 
-1. On server run `Configure-Payload` or `Configure-User` scripts
+1. On server run generate varaibles as `Configure-Payload` or `Configure-User` objects
+2. Run `Generate-Config`. The output of this function is a GUID
 2. Save **GUID** for victim configuration
 3. Save **Pull Server Address** for victime configuration
 
 ### Configure Victim
 
-1. On victim run `Configure-Victim.ps1`
-2. Provide **GUID** as argument 
+1. On victim run import `Configure-Victim.ps1` and run `Configure-Victim
+2. Provide **GUID** and **Remote Address** as arguments
 
 ## Troubleshooting
 

@@ -36,7 +36,7 @@ Creates configuration from two previously defined objects $User and $Payload
         [Parameter(Mandatory = $True)]
         [String[]] $NodeGUID
         )
-        Import-DscResource –ModuleName ’PSDesiredStateConfiguration’ -ModuleVersion 1.1
+        #Import-DscResource –ModuleName ’PSDesiredStateConfiguration’ -ModuleVersion $modVersion 
         Node $NodeGUID {
             foreach ($configobj in $objArray){
                 If ($configobj.Type -eq "Payload") {
