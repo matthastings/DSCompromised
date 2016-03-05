@@ -1,4 +1,4 @@
-﻿function Generate-Config {
+﻿function New-Configuration {
 <#
 .SYNOPSIS
 
@@ -14,7 +14,7 @@ Object array of resources to be included in configuration
 
 .EXAMPLE
 
-PS C:\> Generate-Config -ResourceObject $User,$Payload
+PS C:\> New-Configuration -ResourceObject $User,$Payload
 
 Description
 -----------
@@ -36,9 +36,9 @@ Creates configuration from two previously defined objects $User and $Payload
         [Parameter(Mandatory = $True)]
         [String[]] $NodeGUID
         )
-        #Import-DscResource –ModuleName ’PSDesiredStateConfiguration’ -ModuleVersion $modVersion 
+
         Node $NodeGUID {
-            foreach ($configobj in $objArray){
+            foreach ($configobj in $ResourceObject){
                 If ($configobj.Type -eq "Payload") {
                     $FileBytes = [System.IO.File]::ReadAllBytes($configobj.Sourcefile)
                     CreatePayload $configobj.DestinationPath {}
@@ -142,7 +142,7 @@ New-DscChecksum -ConfigurationPath "$env:SystemDrive\Program Files\WindowsPowers
 }
 
 
-function Configure-User {
+function New-User {
 <#
 .SYNOPSIS
 
@@ -170,7 +170,7 @@ Optionally specifies the group the user should be added to. Default is 'Adminstr
 
 .EXAMPLE
 
-PS C:\> Configure-User -Username test_user -Password Long_And_Complex!
+PS C:\> New-User -Username test_user -Password Long_And_Complex!
 
 Description
 -----------
@@ -181,7 +181,7 @@ Creates an object for the user account 'test_user' with password 'Long_And_Compl
 .EXAMPLE
 
 
-PS C:\> Configure-User -Username test_user -Password Long_And_Complex! -Group RemoteAdmins
+PS C:\> New-User -Username test_user -Password Long_And_Complex! -Group RemoteAdmins
 
 Description
 -----------
@@ -210,7 +210,7 @@ Creates an object for the user account 'test_user' with password 'Long_And_Compl
 }
 
 
-function Configure-Payload
+function New-Payload
 {
 <#
 .SYNOPSIS
@@ -243,7 +243,7 @@ Optionally specifies command line arguments provided to during execution.
 .EXAMPLE
 
 
-PS C:\> Configure-Payload -SourceFile C:\Windows\System32\calc.exe -DestinationPath C:\calc.exe
+PS C:\> New-Payload -SourceFile C:\Windows\System32\calc.exe -DestinationPath C:\calc.exe
 
 Description
 -----------
@@ -276,7 +276,7 @@ If file is deleted or process is stopped script will recreate file and/or relaun
 
     return $newPayloadObject
 }
-function Configure-Server {
+function Initialize-Server {
 
 <#
 .SYNOPSIS
@@ -304,7 +304,7 @@ Note: Default port is 8080
 
 .EXAMPLE
 
-PS C:\> Configure-Server -CompliancePort 9000 -ConfigPort 443
+PS C:\> Initialize-Server -CompliancePort 9000 -ConfigPort 443
 
 Description
 -----------
