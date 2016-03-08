@@ -373,3 +373,99 @@ Configures pull server to host compliance reports on port 9000 and configuration
     Start-DscConfiguration .\SetupPullServer -Force -EA SilentlyContinue
 
 }
+
+function Get-Compliance{
+<#
+.SYNOPSIS
+
+Queries information from DSC Compliance server
+
+.DESCRIPTION
+
+Queries DSC compliance server and returns PS objects for each computer where data is stored. 
+
+.PARAMETER URI
+
+Optional parameter to compliance server URI
+
+.EXAMPLE
+
+PS C:\> Get-Compliance
+
+Description
+-----------
+
+Queries compliance server at the defaul URI (127.0.0.1) on the default port (9080)
+
+#>
+
+    [CmdletBinding()] Param(
+        [Parameter(Mandatory = $False)]
+        [String] $URI = "http://127.0.0.1:9080/PSDSCComplianceServer.svc/Status"
+
+    )
+
+    $StCodes = @"
+    0 = Pull operation was successful
+    1 = Download Manager initialization failure
+    2 = Get configuration command failure
+    3 = Unexpected get configuration response from pull server
+    4 = Configuration checksum file read failure
+    5 = Configuration checksum validation failure
+    6 = Invalid configuration file
+    7 = Available modules check failure
+    8 = Invalid configuration Id In meta-configuration
+    9 = Invalid DownloadManager CustomData in meta-configuration
+    10 = Get module command failure
+    11 = Get Module Invalid Output
+    12 = Module checksum file not found
+    13 = Invalid module file
+    14 = Module checksum validation failure
+    15 = Module extraction failed
+    16 = Module validation failed
+    17 = Downloaded module is invalid
+    18 = Configuration file not found
+    19 = Multiple configuration files found
+    20 = Configuration checksum file not found
+    21 = Module not found
+    22 = Invalid module version format
+    23 = Invalid configuration Id format
+    24 = Get Action command failed
+    25 = Invalid checksum algorithm
+    26 = Get Lcm Update command failed
+    27 = Unexpected Get Lcm Update response from pull server
+    28 = Invalid Refresh Mode in meta-configuration
+    29 = Invalid Debug Mode in meta-configuration
+"@
+    $StCodeHashTable = ConvertFrom-StringData $StCodes
+
+    $Type = "application/json"
+
+    $httpCode = Invoke-WebRequest -Uri $URI -ContentType $Type -Method Get -Headers @{Accept = $Type } -UseDefaultCredentials
+
+    if( $httpCode.StatusCode -ne 200 )
+    {
+        Write-Host "Failed to query compliance server"
+        return
+    }
+
+    $Json =  ConvertFrom-Json $httpCode.Content
+
+    ForEach ($Comp in $Json.value)
+    {
+        $ComplyObj = New-Object -TypeName PSObject -Property @{
+
+        'Computer' = $Comp.TargetName
+        'ConfigID' = $Comp.ConfigurationId
+        'ConfigCheckSum' = $Comp.TargetCheckSum
+        'Compliant' = $Comp.NodeCompliant
+        'LastComplianceTime' = $Comp.LastComplianceTime
+        'LastCheckinTime' = $Comp.LastHeartbeatTime
+        'NodeStatus' = $StCodeHashTable.Get_Item([string]$Comp.StatusCode)
+
+        }
+    }
+
+    $ComplyObj
+
+}
