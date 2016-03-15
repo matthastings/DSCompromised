@@ -34,8 +34,13 @@ on Windows operating systems beginning with  Server 2012 R2 and Windows 8.1.
 
 ### Configure Victim
 
+<<<<<<< HEAD
 1. On victim run import `Configure-Victim.ps1` and run `Configure-Victim
 2. Provide **GUID** and **Remote Address** as arguments
+=======
+1. On victim run `Configure-Victim.ps1`
+2. Provide **GUID** as argument 
+>>>>>>> b9dda71411166f1f876a93ba7bd67fd1cff223bd
 
 ## Troubleshooting
 
