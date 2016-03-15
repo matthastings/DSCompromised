@@ -451,8 +451,11 @@ Queries compliance server at the defaul URI (127.0.0.1) on the default port (908
 
     $Json =  ConvertFrom-Json $httpCode.Content
 
+     [System.Collections.ArrayList]$ReturnArray = @()
+
     ForEach ($Comp in $Json.value)
     {
+
         $ComplyObj = New-Object -TypeName PSObject -Property @{
 
         'Computer' = $Comp.TargetName
@@ -464,8 +467,9 @@ Queries compliance server at the defaul URI (127.0.0.1) on the default port (908
         'NodeStatus' = $StCodeHashTable.Get_Item([string]$Comp.StatusCode)
 
         }
+        $ReturnArray.Add($ComplyObj) | Out-Null
     }
 
-    $ComplyObj
+    return $ReturnArray
 
 }
