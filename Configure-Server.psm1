@@ -24,7 +24,9 @@ Creates configuration from two previously defined objects $User and $Payload
 #>
 
     [CmdletBinding()] Param(
-    [Parameter(Mandatory = $True)]
+    [Parameter(Mandatory = $True,
+        ValueFromPipeline=$True
+    )]
     [Object[]] $ResourceObject
     )
     # Create GUID for configuration
